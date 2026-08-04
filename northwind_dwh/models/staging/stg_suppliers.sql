@@ -8,7 +8,4 @@ SELECT
     TRIM(region) AS region, 
     TRIM(postal_code) AS postal_code,
     TRIM(country) AS country,
-    TRIM(phone) AS phone,
-    TRIM(fax) AS fax, 
-    TRIM(homepage) AS homepage
 FROM {{ source('northwind', 'suppliers')}};

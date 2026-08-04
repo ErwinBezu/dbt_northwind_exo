@@ -3,4 +3,4 @@ SELECT
     category_id,
     category_name,
     description
-FROM {{ source('northwind', 'categories') }};
+FROM {{ source('northwind', 'categories') }}

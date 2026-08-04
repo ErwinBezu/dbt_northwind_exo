@@ -1,5 +1,5 @@
 SELECT
     shipper_id,
-    TRIM(company_name) AS company_name,
-    TRIM(phone) AS phone
-FROM {{ source('northwind', 'shippers') }};
+    CAST(TRIM(company_name) AS VARCHAR(40)) AS company_name,
+    CAST(TRIM(phone) AS VARCHAR(24)) AS phone
+FROM {{ source('northwind', 'shippers') }}

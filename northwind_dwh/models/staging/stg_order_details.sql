@@ -5,4 +5,4 @@ SELECT
     quantity,
     discount, 
     unit_price * quantity * (1 - discount) AS sous_total
-FROM {{ source('northwind', 'order_details') }};
+FROM {{ source('northwind', 'order_details') }}

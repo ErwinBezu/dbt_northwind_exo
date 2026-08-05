@@ -27,6 +27,6 @@ SELECT
     END AS gamme
 FROM stats_categories
 
-
 -- La gamme est définie par rapport au prix moyen de chaque catégorie.
+-- < 75 % : Entrée de gamme | 75-125 % : Milieu de gamme | > 125 % : Premium.
 -- Cela évite d'appliquer les mêmes seuils à des catégories ayant des niveaux de prix très différents.

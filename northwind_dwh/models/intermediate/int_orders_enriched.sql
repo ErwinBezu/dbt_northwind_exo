@@ -26,9 +26,9 @@ SELECT
         ELSE o.shipped_date <= o.required_date
     END AS is_on_time,
     o.shipped_date - o.order_date AS delai_livraison_jours,
-    od.nb_articles,
-    od.quantite_totale,
-    od.montant_total
+    COALESCE(od.nb_articles, 0) AS nb_articles,
+    COALESCE(od.quantite_totale, 0) AS quantite_totale,
+    COALESCE(od.montant_total, 0) AS montant_total
 FROM {{ ref('stg_orders') }} o
-JOIN order_details_aggregated od
+LEFT JOIN order_details_aggregated od
     ON o.order_id = od.order_id

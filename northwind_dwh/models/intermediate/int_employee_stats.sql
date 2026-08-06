@@ -1,6 +1,6 @@
 SELECT
     employee_id,
-    COUNT(*) AS nb_commandes, 
+    COUNT(*) AS nb_commandes_traitees, 
     ROUND(SUM(montant_total), 2) AS ca_total, 
 -- Taux calculé seulement sur les commandes expédiées
     ROUND(

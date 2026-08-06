@@ -1,8 +1,8 @@
 SELECT
     employee_id,
-    CAST(CONCAT(TRIM(first_name), ' ', TRIM(last_name))AS VARCHAR(32)) AS full_name,
-    CAST(TRIM(title) AS VARCHAR(30)) AS title, 
+    CONCAT(TRIM(first_name), ' ', TRIM(last_name))::VARCHAR(32) AS full_name,
+    TRIM(title)::VARCHAR(30) AS title, 
     hire_date,
-    CAST(TRIM(city) AS VARCHAR(15)) AS city,
-    CAST(TRIM(country) AS VARCHAR(15)) AS country
+    TRIM(city)::VARCHAR(15) AS city,
+    TRIM(country)::VARCHAR(15) AS country
 FROM {{ source('northwind', 'employees')}}

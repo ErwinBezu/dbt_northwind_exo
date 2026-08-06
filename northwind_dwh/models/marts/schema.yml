@@ -27,6 +27,11 @@ models:
       - name: montant_total
         tests: 
           - not_null
+      - name: is_on_time
+        tests:
+          - not_null:
+              config: 
+                where: "shipped_date IS NOT NULL"
 
   - name: dim_products
     columns:

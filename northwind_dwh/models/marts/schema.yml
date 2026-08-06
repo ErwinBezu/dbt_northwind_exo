@@ -1,0 +1,23 @@
+version: 2
+
+models:
+  - name: fact_orders
+    columns:
+      - name: customer_id
+        tests:
+          - relationships:
+              arguments:
+                to: ref('dim_customers')
+                field: customer_id
+      - name: employee_id
+        tests: 
+          - relationships:
+              arguments:
+                to: ref('dim_employees')
+                field: employee_id
+      - name: ship_via
+        tests:
+          - relationships:
+              arguments:
+                to: ref('dim_shippers')
+                field: shipper_id

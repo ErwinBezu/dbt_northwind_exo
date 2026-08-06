@@ -18,13 +18,13 @@ SELECT
     category_description,
     supplier_name,
     supplier_country,
-    CASE
+    (CASE
         WHEN unit_price < prix_moyen_categorie * 0.75
             THEN 'Entrée de gamme'
         WHEN unit_price <= prix_moyen_categorie * 1.25
             THEN 'Milieu de gamme'
         ELSE 'Premium'
-    END AS gamme
+    END)::VARCHAR(20) AS gamme
 FROM stats_categories
 
 -- La gamme est définie par rapport au prix moyen de chaque catégorie.

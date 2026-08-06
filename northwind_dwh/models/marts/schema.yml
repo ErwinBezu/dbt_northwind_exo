@@ -21,3 +21,20 @@ models:
               arguments:
                 to: ref('dim_shippers')
                 field: shipper_id
+      - name: freight
+        tests: 
+          - not_null
+      - name: montant_total
+        tests: 
+          - not_null
+
+  - name: dim_products
+    columns:
+      - name: gamme
+        tests:
+          - accepted_values:
+              arguments:
+                values:
+                  - "Entrée de gamme"
+                  - "Milieu de gamme"
+                  - "Premium"

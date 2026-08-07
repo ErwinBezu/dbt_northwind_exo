@@ -247,6 +247,11 @@ Générer la documentation :
 dbt docs generate
 dbt docs serve
 ```
+Commandes dbt/sélection des modèles (question 24c)
+```bash
+dbt build --select fact_orders+
+```
+Le + placé après `fact_orders` permet de sélectionner fact_orders ainsi que tous les modèles qui en dépendent (ses descendants). La commande dbt build exécute également les tests associés aux modèles sélectionnés.
 
 ---
 

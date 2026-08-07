@@ -92,6 +92,31 @@ models:
       - name: est_weekend
         description: "Indique si la date correspond à un samedi ou un dimanche"
 
+# fact_order_lines
+  - name: fact_order_lines
+    description: "Table de faits contenant le détail des lignes de commandes"
+    columns: 
+      - name: order_id
+        description: "Identifiant de la commande"
+      - name: product_id
+        description: "Identifiant du produit commandé"
+      - name: customer_id
+        description: "Identifiant du client ayant passé la commande"
+      - name: employee_id
+        description: "Identifiant de l'employé ayant traité la commande"
+      - name: ship_via
+        description: "Idenfiant du transporteur utilisé pour la livraison"
+      - name: order_date
+        description: "Date de la commande"
+      - name: quantity
+        description: "Quantité du produit commandé"
+      - name: unit_price 
+        description: "Prix unitaire du produit"
+      - name: discount
+        description: "Réduction appliqué à la ligne de commande"
+      - name: sous_total
+        description: "Montant total de la ligne de commande après application de la remise"
+
 # fact_orders
   - name: fact_orders
     description: "Table de faits regroupant les informations de commande, de livraison et les principaux indicateurs commerciaux"
@@ -180,7 +205,3 @@ models:
         description: "Classement de l'employé selon le CA généré du plus élevé au plus faible"
       - name: pct_ca_total
         description: "Part en pourcentage du CA global générée par l'employé"
-
-
-
-

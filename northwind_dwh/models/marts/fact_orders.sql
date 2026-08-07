@@ -15,5 +15,5 @@ SELECT
     nb_articles,
     quantite_totale,
     montant_total,
-    (montant_total + freight) AS montant_total_avec_frais
+    ROUND((montant_total + freight)::NUMERIC, 2) AS montant_total_avec_frais
 FROM {{ ref('int_orders_enriched')}}

@@ -1,64 +1,173 @@
 version: 2
 
 models: 
+# stg_categories
   - name: stg_categories
+    description: "Modèle de staging des catégories provenant de la table source categories"
     columns:
       - name: category_id
+        description: "Identifiant unique de la categorie"
         tests:
           - unique
           - not_null
+      - name: category_name
+        description: "Nom de la catégorie"
+      - name: description
+        description: "Description de la catégorie"
 
+# stg_customers
   - name: stg_customers
+    description: "Modèle de staging des clients provenant de la table source clients"
     columns:
       - name: customer_id
+        description: "Identifiant unique du client"
         tests:
           - unique
           - not_null
- 
+      - name: company_name
+        description: "Nom de l'entreprise cliente"
+      - name: contact_name
+        description: "Nom du contact du client"
+      - name: contact_title
+        description: "Fonction du contact"
+      - name: city
+        description: "Ville du client"
+      - name: country
+        description: "Pays du client"
+      - name: phone
+        description: "Téléphone du client"
+
+# stg_employees 
   - name: stg_employees
+    description: "Modèle de staging des employés provenant de la table source employees"
     columns:
       - name: employee_id
+        description: "Identifiant unique de l'employé"
         tests:
           - unique
           - not_null
-  
+      - name: full_name
+        description: "Nom complet de l'employé, obtenu par la concaténation du prénom et du nom"
+      - name: title
+        description: "Fonction occupée par l'employé"
+      - name: hide_date
+        description: "Date d'embauche de l'employé"
+      - name: city 
+        description: "Ville de l'employé"
+      - name: country
+        description: "Pays de l'employé"
+
+# stg_order_details  
   - name: stg_order_details
+    description: "Modèle de staging des lignes de commande provenant de la table source order_details"
     columns:
       - name: order_id
+        description: "Identifiant de la commande"
         tests:
           - not_null
       - name: product_id
+        description: "Identifiant du produit commandé"
         tests:
           - not_null
+      - name: unit_price
+        description: "Prix unitaire du produit"
+      - name: quantity
+        description: "Quantité commandée"
+      - name: discount
+        description: "Réduction appliquée"
+      - name: sous_total
+        description: "Montant de la ligne de commande après application de la réduction"
     data_tests:
       - unique:
           arguments: 
             column_name: "(order_id || '-' || product_id)"
-  
+
+# stg_orders 
   - name: stg_orders
+    description: "Modèle de staging des commandes provenant de la table source orders. Il conserve les informations concernant la commande et la livraison"
     columns:
       - name: order_id
+        description: "Identifiant unique de la commande"
         tests:
           - unique
           - not_null
+      - name: customer_id
+        description: "Identifiant du client ayant passé la commande"
+      - name: employee_id
+        description: "Identifiant de l'employé ayant traité la commande"
+      - name: ship_via
+        description: "Identifiant du transporteur utilisé pour expédier la commande"
+      - name: order_date
+        description: "Date de création de la commande"
+      - name: required_date
+        description: "Date de livraison attendue"
+      - name: shipped_date
+        description: "Date réelle d'expédition de la commande"
+      - name: ship_city
+        description: "Ville de destination de la commande"
+      - name: ship_country
+        description: "Pays de destination de la commande"
+      - name: freight
+        description: "Montant des frais de transport de la commande"
+      - name: is_shipped
+        description: "Indique si la commande est expédiée. TRUE lorsque que shipped_date est renseignée"
 
+# stg_products
   - name: stg_products
+    description: "Modèle de staging des produits provenant de la table source products"
     columns:
       - name: product_id
+        description: "Identifiant unique du produit"
         tests:
           - unique
           - not_null
+      - name: product_name
+        description: "Nom du produit"
+      - name: supplier_id
+        description: "Identifiant du fournisseur du produit"
+      - name: category_id
+        description: "Identifiant de la catégorie du produit"
+      - name: unit_price
+        description: "Prix unitaire du produit"
+      - name: units_in_stock
+        description: "Quantité en stock"
+      - name: units_on_order
+        description: "Quantité en réapprovisionnement"
+      - name: discountinued
+        description: "Indique si le produit est toujours commercialisé avec FALSE ou arrêté avec TRUE"
+      - name: en_stock
+        description: "Indique si le produit est disponible en stock avec TRUE" 
 
+# stg_shippers
   - name: stg_shippers
+    description: "Modèle de staging des transporteurs provenant de la table source shippers"
     columns:
       - name: shipper_id
+        description: "Identifiant unique de la transporteur"
         tests:
           - unique
           - not_null
-  
+      - name: company_name
+        description: "Nom de l'entreprise transporteur"
+      - name: phone 
+        description: "Téléphone du transporteur"
+
+# stg_suppliers  
   - name: stg_suppliers
+    description: "Modèle de staging des fournisseurs provenant de la table source suppliers"
     columns:
       - name: supplier_id
+        description: "Identifiant unique du fournisseur"
         tests: 
           - unique
           - not_null
+      - name: company_name
+        description: "Nom de l'entreprise fournisseur"
+      - name: contact_name
+        description: "Nom du contact dans l'entreprise fournisseur"
+      - name: city 
+        description: "Ville du fournisseur"
+      - name: country
+        description: "Pays du fournisseur"
+      - name: phone
+        description: "Téléphone du fournisseur"

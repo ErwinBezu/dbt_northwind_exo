@@ -206,6 +206,21 @@ Des tests SQL personnalisés sont également présents dans le dossier `tests/` 
 
 ---
 
+## Gestion des droits PostgreSQL
+
+Le projet utilise un utilisateur dédié `dbt_user` disposant des droits nécessaires
+pour lire les données sources et créer les modèles dbt dans le schéma de développement.
+
+### Vérification des droits sur le schéma public
+
+Une tentative d'insertion dans une table du schéma `public` avec `dbt_user` a été effectuée :
+
+```sql
+INSERT INTO public.categories (category_name)
+VALUES ('TEST');
+```
+---
+
 ## Data Lineage
 
 Le lineage généré par dbt permet de visualiser les dépendances entre les

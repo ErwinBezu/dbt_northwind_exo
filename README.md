@@ -299,3 +299,27 @@ Analyses SQL => interrogation et validation du DWH
 ```
 
 ---
+
+## Question 23-G : Création de la vue analytique sur DBeaver
+
+```SQL
+create view dbt_dev.vue_analyse_clients as
+select 
+	f.order_id,
+	f.customer_id,
+	d.company_name,
+	f.order_date, 
+	f.montant_total_avec_frais,
+	ROUND(SUM(f.montant_total_avec_frais) OVER(
+		partition by f.customer_id
+		order by f.order_date, f.order_id
+		ROWS between unbounded preceding and current row
+		)::numeric, 2) as cumul_client,
+	ROUND((100 * f.montant_total_avec_frais 
+            / NULLIF(SUM(f.montant_total_avec_frais) OVER (PARTITION BY f.customer_id),0))::NUMERIC, 2) AS pct_ca_client,
+	RANK() OVER(partition by f.customer_id
+		order by f.montant_total_avec_frais desc) as rang_commande
+FROM dbt_dev.fact_orders f
+JOIN dbt_dev.dim_customers d
+    ON f.customer_id = d.customer_id;
+```

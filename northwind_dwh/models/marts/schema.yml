@@ -1,41 +1,70 @@
 version: 2
 
 models:
-  - name: fact_orders
+# dim_customers
+  - name: dim_customers
+    description: "Dimension contennant les informations des clients"
     columns:
       - name: customer_id
-        tests:
-          - relationships:
-              arguments:
-                to: ref('dim_customers')
-                field: customer_id
-      - name: employee_id
-        tests: 
-          - relationships:
-              arguments:
-                to: ref('dim_employees')
-                field: employee_id
-      - name: ship_via
-        tests:
-          - relationships:
-              arguments:
-                to: ref('dim_shippers')
-                field: shipper_id
-      - name: freight
-        tests: 
-          - not_null
-      - name: montant_total
-        tests: 
-          - not_null
-      - name: is_on_time
-        tests:
-          - not_null:
-              config: 
-                where: "shipped_date IS NOT NULL"
+        description: "Identifiant unique du client"
+      - name: company_name
+        description: "Nom de l'entreprise cliente"
+      - name: contact_name
+        description: "Nom du contact du client"
+      - name: contact_title
+        description: "Fonction du contact"
+      - name: city
+        description: "Ville du client"
+      - name: country
+        description: "Pays du client"
+      - name: phone
+        description: "Téléphone du client"
 
-  - name: dim_products
+# dim_employees 
+  - name: dim_employees
+    description: "Dimension contennant les informations des employés"
     columns:
+      - name: employee_id
+        description: "Identifiant unique de l'employé"
+      - name: full_name
+        description: "Nom complet de l'employé, obtenu par la concaténation du prénom et du nom"
+      - name: title
+        description: "Fonction occupée par l'employé"
+      - name: hide_date
+        description: "Date d'embauche de l'employé"
+      - name: city 
+        description: "Ville de l'employé"
+      - name: country
+        description: "Pays de l'employé"
+
+#dim_products
+  - name: dim_products
+    description: "Dimension contenant les informations des produits, enrichies et une classification en gamme de prix "
+    columns:
+      - name: product_id
+        description: "Identifiant unique du produit"
+      - name: product_name
+        description: "Nom du produit"
+      - name: unit_price
+        description: "Prix unitaire du produit"
+      - name: units_in_stock
+        description: "Quantité en stock"
+      - name: units_on_order
+        description: "Quantité en réapprovisionnement"
+      - name: discountinued
+        description: "Indique si le produit est toujours commercialisé avec FALSE ou arrêté avec TRUE"
+      - name: en_stock
+        description: "Indique si le produit est disponible en stock avec TRUE"
+      - name: category_name
+        description: "Nom de la catégorie du produit"
+      - name: category_description
+        description: "Description de la catégorie du produit"
+      - name: supplier_name
+        description: "Nom du fournisseur du produit"
+      - name: supplier_country
+        description: "Pays du fournisseur du produit"
       - name: gamme
+        description: "Classification du produit selon son prix par rapport au prix moyen de sa catégorie"
         tests:
           - accepted_values:
               arguments:
@@ -43,3 +72,115 @@ models:
                   - "Entrée de gamme"
                   - "Milieu de gamme"
                   - "Premium"
+
+#dim_temps
+  - name: dim_temps
+    description: "Dimension temporelle construite à partir des dates de commande"
+    columns: 
+      - name: date_id
+        description: "Date disctincte de référence"
+      - name: jour
+        description: "Jour du mois"
+      - name: mois
+        description: "Numéro du mois"
+      - name: année
+        description: "Année"
+      - name: trimestre 
+        description: "Numéro du trimestre"
+      - name: annee_mois
+        description: "Représentation de l'année et du mois au format YYYY-MM"
+      - name: est_weekend
+        description: "Indique si la date correspond à un samedi ou un dimanche"
+
+# fact_orders
+  - name: fact_orders
+    description: "Table de faits regroupant les informations de commande, de livraison et les principaux indicateurs commerciaux"
+    columns:
+      - name: order_id
+        description: "Idenfiant unique de la commande"
+      - name: customer_id
+        description: "Identifiant du client ayant passé la commande"
+        tests:
+          - relationships:
+              arguments:
+                to: ref('dim_customers')
+                field: customer_id
+      - name: employee_id
+        description: "Identifiant de l'employé ayant traité la commande"
+        tests: 
+          - relationships:
+              arguments:
+                to: ref('dim_employees')
+                field: employee_id
+      - name: ship_via
+        description: "Identifiant du transporteur chargé de la livraison"
+        tests:
+          - relationships:
+              arguments:
+                to: ref('dim_shippers')
+                field: shipper_id
+      - name: order_date
+        description: "Date de la création de la commande"
+      - name: required_date
+        description: "Date de livraison attendue"
+      - name: shipped_date
+        description: "Date réelle d'expédition de la commande"
+      - name: ship_city
+        description: "Ville de destination de la commande"
+      - name: ship_country
+        description: "Pays de destination de la commande"
+      - name: freight
+        description: "Montant des frais de transport de la commande"
+        tests: 
+          - not_null
+      - name: is_shipped
+        description: "Indique si la commande est expédiée. TRUE lorsque que shipped_date est renseignée"
+      - name: is_on_time
+        description: "Indique si la commande a été expédiée avant la date de livraison attendue. NULL pour les commandes non expédiées"
+        tests:
+          - not_null:
+              config: 
+                where: "shipped_date IS NOT NULL"
+      - name: delai_livraison_jours
+        description: "Nombre de jours entre la date de commande et de livraison"
+      - name: nb_articles
+        description: "Nombre de lignes de produits de la commandes"
+      - name: quantite_totale
+        description: "Quantité de produits commandés"
+      - name: montant_total
+        description: "Montant total de la commande hors frais de transport"
+        tests: 
+          - not_null
+      - name: montant_total_avec_frais
+        description: "Montant total de la commande avec frais de transport"
+
+# mart_employee_performance
+  - name: mart_employee_performance
+    description: "Mart analytique mesurant les performances des employés"
+    columns: 
+      - name: employee_id
+        description: "Idenfiant unique de l'employé"
+      - name: full_name
+        description: "Nom complet de l'employé"
+      - name: title
+        description: "Fonction de l'employé"
+      - name: country
+        description: "Pays de l'employé"
+      - name: ca_total
+        description: "CA généré par les commandes traité par l'employé, frais de transport inclus"
+      - name: nb_commandes
+        description: "Nombre de commandes traitées par l'employé"
+      - name: panier_moyen
+        description: "Montant moyen des commandes traité par l'employé"
+      - name: taux_livraison_a_temps
+        description: "Pourcentage de commande expédiés avant la date attendue"
+      - name: delai_moyen_jours
+        description: "Délai moyen en jour entre la commande et la date d'expédition"
+      - name: rang
+        description: "Classement de l'employé selon le CA généré du plus élevé au plus faible"
+      - name: pct_ca_total
+        description: "Part en pourcentage du CA global générée par l'employé"
+
+
+
+

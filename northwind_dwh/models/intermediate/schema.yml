@@ -1,0 +1,144 @@
+version: 2
+
+models:
+# int_customers_stats
+  - name: int_customers_stats
+    description: > 
+      Modèle intermédiaire agrégeant les commandes par client afin de calculer le nombre de commandes,
+      le CA total, la date de la première et de la dernière commande et le delai moyen entre deux commandes.
+      Les clients sans commande sont concervés
+    columns:
+      - name: customer_id
+        description: "Identifiant unique du client"
+      - name: nb_commandes
+        descritpion: "Nombre total de commandes passées par le client"
+      - name: ca_total
+        description: "CA total généré par le client"
+      - name: date_premiere_commande
+        description: "Date de la première commande du client"
+      - name: date_derniere_commande
+        description: "Date de la dernière commande du client"
+      - name: delai_moyen_entre_commandes
+        description: "Délai moyen en jours entre les commandes du client"
+       
+# int_employee_stats
+  - name: int_employee_stats
+    description: >
+      Modèle intermédiaire agrégeant les commandes par employé,
+      pour calculer le nombre de commandes traitées, le ca généré, le taux de livraison à temps et le délai moyen de livraison
+    columns: 
+      - name: employee_id
+        description: "Identifiant unique de l'employé"
+      - name: nb_commandes_traitees
+        description: "Nombre de commandes traitées par l'employé"
+      - name: ca_total
+        description: "CA généré par les commandes traitées par l'employé"
+      - name: taux_livraison_a_temps
+        description: "Pourcentage de commandes expédiées à temps parmi les commandes livrées"
+      - name: delai_moyen_entre_commandes
+        description: "Délai moyen de livraison en jours"
+
+# int_monthly_revenue
+  - name: int_monthly_revenue
+    description: >
+      Modèle intermédiaire agrégeant les commandes par mois, 
+      pour calculer le nb de commandes, le CA mensuel, le panier moyen et l'évolution par rapport au CA du mois précédent
+    columns:
+      - name: mois
+        description: "Mois de référence"
+      - name: nb_commandes
+        description: "Nombre de commandes enregistrées dans le mois"
+      - name: ca_mensuel
+        description: "CA généré durant le mois"
+      - name: panier_moyen
+        description: "Montant moyen d'une commande dans le mois"
+      - name: ca_mois_precedent
+        description: "CA du mois précédent"
+      - name: variation_pct
+        description: "Variation en pourcentage du CA par rapport au mois précédent"
+
+# int_orders_enriched
+  - name: int_orders_enriched
+    description: >
+      Modèle intermédiaire enrichissant les commandes avec les informations
+      des lignes de commande. Calcule le nb d'articles, la quantité totale,
+      le montant total, le délai de livraison. 
+    columns:
+      - name: order_id
+        description: "Identifiant unique de la commande"
+      - name: customer_id
+        description: "Identifiant du client ayant passé la commande"
+      - name: employee_id
+        description: "Identifiant de l'employé ayant traité la commande"
+      - name: ship_via
+        description: "Identifiant du transporteur utilisé pour expédier la commande"
+      - name: order_date
+        description: "Date de création de la commande"
+      - name: required_date
+        description: "Date de livraison attendue"
+      - name: shipped_date
+        description: "Date réelle d'expédition de la commande"
+      - name: ship_city
+        description: "Ville de destination de la commande"
+      - name: ship_country
+        description: "Pays de destination de la commande"
+      - name: freight
+        description: "Montant des frais de transport de la commande"
+      - name: is_shipped
+        description: "Indique si la commande est expédiée. TRUE lorsque que shipped_date est renseignée"
+      - name: is_on_time
+        description: "Indique si la commande a été expédiée avant la date de livraison attendue. NULL pour les commandes non expédiées"
+      - name: delai_livraison_jours
+        description: "Nombre de jours entre la date de commande et de livraison"
+      - name: nb_articles
+        description: "Nombre de lignes de produits de la commandes"
+      - name: quantite_totale
+        description: "Quantité de produits commandés"
+      - name: montant_total
+        description: "Montant total de la commande hors frais de transport"
+
+# int_product_sales
+  - name: int_product_sales
+    description: >
+      Modèle intermédiaire agrégeant les ventes par produit
+      pour calculer les quantités vendues; le CA généré, le nombre de commandes distinctes et le stock restant
+    columns:
+      - name: product_id
+        description: "Identifiant unique du produit"
+      - name: quantite_totale_vendue
+        description: "Quantité totale vendue du produit"
+      - name: ca_genere
+        description: "CA généré par les ventes du produit"
+      - name: nb_commandes_distinctes
+        description: "Nombre de commande distinctes contenant le produit"
+      - name: stock_restant
+        description: "Quantité actuellement disponible en stock"
+
+# int_products_enriched
+  - name: int_products_enriched
+    description: >
+      Modèle intermédiaire enrichissant les produits avec les informations de
+      leur catégorie et de leur fournisseur
+    columns:
+      - name: product_id
+        description: "Identifiant unique du produit"
+      - name: product_name
+        description: "Nom du produit"
+      - name: unit_price
+        description: "Prix unitaire du produit"
+      - name: units_in_stock
+        description: "Quantité en stock"
+      - name: units_on_order
+        description: "Quantité en réapprovisionnement"
+      - name: discountinued
+        description: "Indique si le produit est toujours commercialisé avec FALSE ou arrêté avec TRUE"
+      - name: en_stock
+        description: "Indique si le produit est disponible en stock avec TRUE"
+      - name: category_name
+        description: "Nom de la catégorie du produit"
+      - name: category_description
+        description: "Description de la catégorie du produit"
+      - name: supplier_name
+        description: "Nom du fournisseur du produit"
+      - name: supplier_country
+        description: "Pays du fournisseur du produit"

@@ -154,6 +154,12 @@ Des tests SQL personnalisés sont également présents dans le dossier `tests/` 
 - chaque `order_date` de `fact_orders` existe dans `dim_temps`
 ---
 
+## Data Lineage
+
+![Data Lineage](docs/lineage_graph.png)
+
+---
+
 ## Exécution
 
 Installer les dépendances :
